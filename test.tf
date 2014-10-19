@@ -14,14 +14,43 @@ provider "aws" {
     region      = "${var.aws_region}"
 }
 
-resource "aws_route53_zone" "foo" {
-    name = "bar.com"
+resource "aws_vpc" "vpc" {
+    cidr_block = "10.0.0.0/16"
 }
 
-resource "aws_route53_record" "dkim" {
-    zone_id = "${aws_route53_zone.foo.id}"
-    name    = "bar.com"
-    type    = "TXT"
-    ttl     = "300"
-    records = ["lalalala"]
+resource "aws_security_group" "bar" {
+    name = "foo"
+    description = "testing"
+    vpc_id = "${aws_vpc.vpc.id}"
+
+    ingress {
+        from_port = 22
+        to_port = 22 
+        protocol = "tcp"
+        cidr_blocks = ["1.1.1.1/32"]
+    }
+    ingress {
+        from_port = 22
+        to_port = 23 
+        protocol = "tcp"
+        cidr_blocks = ["1.1.1.2/32"]
+    }
+    ingress {
+        from_port = 22
+        to_port = 24 
+        protocol = "tcp"
+        cidr_blocks = ["1.1.1.3/32"]
+    }
+    ingress {
+        from_port = 22
+        to_port = 22 
+        protocol = "tcp"
+        cidr_blocks = ["1.1.1.4/32"]
+    }
+    ingress {
+        from_port = 22
+        to_port = 22 
+        protocol = "tcp"
+        cidr_blocks = ["1.1.1.5/32"]
+    }
 }
